@@ -28,6 +28,11 @@
     <string name="acc_service_started_connected_to">সার্ভিস সফলভাবে শুরু হয়েছে। এখন %1$s-এর সাথে সংযুক্ত।</string>
     <string name="toast_services_failure">সার্ভিস শুরু হতে ব্যর্থ হয়েছে</string>
 
+    <plurals name="acc_group_tab">
+        <item quantity="one">%1$s। এতে %2$dটি সার্ভার রয়েছে</item>
+        <item quantity="other">%1$s। এতে %2$dটি সার্ভার রয়েছে</item>
+    </plurals>
+
     <!--ServerActivity-->
     <string name="title_server">কনফিগারেশন ফাইল</string>
     <string name="menu_item_add_config">কনফিগারেশন যোগ করুন</string>
@@ -552,7 +557,13 @@
     <string name="acc_clear_search">অনুসন্ধান মুছুন</string>
     <string name="acc_add">কনফিগারেশন যোগ করুন</string>
     <string name="acc_more">আরও বিকল্প</string>
-    <string name="acc_selected_server">Selected</string>
+    <plurals name="server_test_delay_accessibility_value">
+        <item quantity="one">%1$d মিলিসেকেন্ড</item>
+        <item quantity="other">%1$d মিলিসেকেন্ড</item>
+    </plurals>
+    <string name="acc_share_config_named">%1$s কনফিগারেশন শেয়ার করুন</string>
+    <string name="acc_edit_config_named">%1$s কনফিগারেশন সম্পাদনা করুন</string>
+    <string name="acc_delete_config_named">%1$s কনফিগারেশন মুছুন</string>
     <string name="acc_share_subscription">সাবস্ক্রিপশন লিংক শেয়ার করুন</string>
     <string name="acc_last_updated">সর্বশেষ আপডেট করা হয়েছে %1$s-এ</string>
     <string name="acc_subscription_update_label">%1$s আপডেট</string>
