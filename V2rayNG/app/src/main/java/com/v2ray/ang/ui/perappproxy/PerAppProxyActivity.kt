@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.v2ray.ang.R
@@ -59,6 +61,50 @@ private enum class PerAppMenuAction(@StringRes val labelRes: Int) {
     SelectProxyApps(R.string.menu_item_select_proxy_app),
     ImportSelection(R.string.menu_item_import_proxy_app),
     ExportSelection(R.string.menu_item_export_proxy_app)
+}
+
+@StringRes
+internal fun perAppRoutingDescriptionRes(
+    perAppProxyEnabled: Boolean,
+    bypassApps: Boolean,
+    checked: Boolean,
+): Int = when {
+    !perAppProxyEnabled -> R.string.acc_per_app_routing_disabled
+    checked == bypassApps -> R.string.acc_app_routed_directly
+    else -> R.string.acc_app_routed_through
+}
+
+@Composable
+private fun PerAppSwitch(
+    label: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.toggleable(
+            value = checked,
+            role = Role.Switch,
+            onValueChange = onCheckedChange,
+        ),
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Switch(
+            checked = checked,
+            onCheckedChange = null,
+            modifier = Modifier.scale(0.65f),
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = MaterialTheme.colorScheme.onSecondary,
+                checkedTrackColor = MaterialTheme.colorScheme.secondary,
+            ),
+        )
+    }
 }
 
 class PerAppProxyActivity : BaseComponentActivity() {
@@ -206,47 +252,19 @@ fun PerAppProxyScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.per_app_proxy_settings_enable),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Switch(
-                            checked = perAppProxyEnabled,
-                            modifier = Modifier.scale(0.65f),
-                            onCheckedChange = onPerAppProxyChanged,
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MaterialTheme.colorScheme.onSecondary,
-                                checkedTrackColor = MaterialTheme.colorScheme.secondary
-                            )
-                        )
-                    }
+                    PerAppSwitch(
+                        label = stringResource(R.string.per_app_proxy_settings_enable),
+                        checked = perAppProxyEnabled,
+                        onCheckedChange = onPerAppProxyChanged,
+                        modifier = Modifier.weight(1f),
+                    )
                     Spacer(modifier = Modifier.width(16.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            text = stringResource(R.string.switch_bypass_apps_mode),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Switch(
-                            checked = bypassApps,
-                            modifier = Modifier.scale(0.65f),
-                            onCheckedChange = onBypassAppsChanged,
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = MaterialTheme.colorScheme.onSecondary,
-                                checkedTrackColor = MaterialTheme.colorScheme.secondary
-                            )
-                        )
-                    }
+                    PerAppSwitch(
+                        label = stringResource(R.string.switch_bypass_apps_mode),
+                        checked = bypassApps,
+                        onCheckedChange = onBypassAppsChanged,
+                        modifier = Modifier.weight(1f),
+                    )
                     IconButton(onClick = onInfoClick) {
                         Icon(
                             painter = painterResource(R.drawable.ic_about_24dp),
@@ -267,12 +285,16 @@ fun PerAppProxyScreen(
             ) {
                 items(items = apps, key = { it.packageName }) { app ->
                     val checked = blacklist.contains(app.packageName)
+                    val routingDescription = stringResource(
+                        perAppRoutingDescriptionRes(perAppProxyEnabled, bypassApps, checked)
+                    )
                     AppListItem(
                         appName = app.appName,
                         packageName = app.packageName,
                         icon = null,
                         checked = checked,
-                        onCheckedChange = { onToggleApp(app.packageName) }
+                        onCheckedChange = { onToggleApp(app.packageName) },
+                        routingDescription = routingDescription,
                     )
                     ItemDivider()
                 }
