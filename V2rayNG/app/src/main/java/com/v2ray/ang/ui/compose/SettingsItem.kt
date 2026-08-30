@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -26,6 +27,10 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.v2ray.ang.R
@@ -49,10 +54,18 @@ fun CollapsiblePreferenceGroupHeader(
     onExpandedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val groupDescription = stringResource(
+        if (expanded) R.string.acc_settings_group_expanded
+        else R.string.acc_settings_group_collapsed,
+        title,
+    )
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onExpandedChange(!expanded) }
+            .semantics {
+                contentDescription = groupDescription
+            }
+            .clickable(role = Role.Button) { onExpandedChange(!expanded) }
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -60,7 +73,8 @@ fun CollapsiblePreferenceGroupHeader(
             text = title,
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.weight(1f)
+            // The button label already includes the title and its disclosure state.
+            modifier = Modifier.weight(1f).clearAndSetSemantics { }
         )
         Icon(
             painter = painterResource(R.drawable.ic_expand_more_24dp),
@@ -79,7 +93,7 @@ private fun SettingsItemRow(
     title: String,
     description: String?,
     enabled: Boolean,
-    onClick: (() -> Unit)?,
+    interactionModifier: Modifier,
     modifier: Modifier = Modifier,
     trailing: @Composable (() -> Unit)? = null
 ) {
@@ -91,7 +105,7 @@ private fun SettingsItemRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .then(if (onClick != null) Modifier.clickable(enabled = enabled, onClick = onClick) else Modifier)
+            .then(interactionModifier)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -146,9 +160,7 @@ fun SettingsEditItem(
         title = title,
         description = description,
         enabled = enabled,
-        onClick = if (enabled) {
-            { showDialog = true }
-        } else null,
+        interactionModifier = Modifier.clickable(enabled = enabled) { showDialog = true },
         modifier = modifier
     )
 
@@ -193,9 +205,7 @@ fun SettingsListItem(
         title = title,
         description = summary.ifEmpty { null },
         enabled = enabled,
-        onClick = if (enabled) {
-            { showDialog = true }
-        } else null,
+        interactionModifier = Modifier.clickable(enabled = enabled) { showDialog = true },
         modifier = modifier
     )
 
@@ -228,7 +238,7 @@ fun SettingsMenuItem(
         title = title,
         description = subtitle,
         enabled = true,
-        onClick = onClick,
+        interactionModifier = Modifier.clickable(onClick = onClick),
         modifier = modifier
     )
 }
@@ -248,14 +258,17 @@ fun SettingsSwitchItem(
         title = title,
         description = summary,
         enabled = enabled,
-        onClick = if (enabled) {
-            { onCheckedChange(!checked) }
-        } else null,
+        interactionModifier = Modifier.toggleable(
+            value = checked,
+            enabled = enabled,
+            role = Role.Switch,
+            onValueChange = onCheckedChange
+        ),
         modifier = modifier,
         trailing = {
             Switch(
                 checked = checked,
-                onCheckedChange = if (enabled) onCheckedChange else null,
+                onCheckedChange = null,
                 modifier = Modifier.scale(0.8f),
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = MaterialTheme.colorScheme.onSecondary,
