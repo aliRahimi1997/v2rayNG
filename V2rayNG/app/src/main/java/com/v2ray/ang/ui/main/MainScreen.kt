@@ -186,6 +186,7 @@ fun MainScreen(
                 MainBottomBar(
                     displayText = displayText,
                     accessibilityText = accessibilityText,
+                    status = uiState.status,
                     testAnnouncements = mainViewModel.testAnnouncements,
                     formatTestAnnouncement = mainViewModel::formatTestAnnouncement,
                     isRunning = isRunning,
