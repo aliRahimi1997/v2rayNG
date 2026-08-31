@@ -65,14 +65,14 @@ internal fun ServerMenuAction.perform(
     guid: String,
     profile: ProfileItem,
     onAction: (MainAction) -> Unit,
-    onRemove: (String) -> Unit,
+    onRemove: (String, String) -> Unit,
 ) {
     when (this) {
         ServerMenuAction.ShareQRCode -> onAction(MainAction.ShareQRCode(guid))
         ServerMenuAction.ShareClipboard -> onAction(MainAction.ShareClipboard(guid))
         ServerMenuAction.ShareFullContent -> onAction(MainAction.ShareFullContent(guid))
         ServerMenuAction.Edit -> onAction(MainAction.EditServer(guid, profile))
-        ServerMenuAction.Delete -> onRemove(guid)
+        ServerMenuAction.Delete -> onRemove(guid, profile.remarks)
     }
 }
 
