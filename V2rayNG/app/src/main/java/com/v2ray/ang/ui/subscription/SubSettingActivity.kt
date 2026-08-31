@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -37,10 +38,12 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -168,6 +171,9 @@ fun SubSettingScreen(
                 items = subscriptions,
                 key = { _, item -> item.guid }
             ) { _, subCache ->
+                val subscriptionName = subscriptionAccessibilityName(
+                    subCache.subscription.remarks, subCache.subscription.url, stringResource(R.string.acc_unnamed_subscription)
+                )
                 val lastUpdated = Utils.formatTimestamp(subCache.subscription.lastUpdated)
                 val lastUpdatedAccessibility = if (lastUpdated.isNotEmpty()) {
                     stringResource(
@@ -183,9 +189,9 @@ fun SubSettingScreen(
                 } else {
                     ""
                 }
-                val subscriptionUpdateLabel = stringResource(
-                    R.string.acc_subscription_update_label,
-                    subCache.subscription.remarks,
+                val subscriptionUpdateState = stringResource(
+                    if (subCache.subscription.enabled) R.string.acc_subscription_update_on
+                    else R.string.acc_subscription_update_off,
                 )
                 ReorderableItem(reorderableState, key = subCache.guid) { isDragging ->
                     ReorderableListItem(
@@ -195,13 +201,24 @@ fun SubSettingScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .semantics(mergeDescendants = true) {}
+                                .semantics(mergeDescendants = true) {
+                                    contentDescription = subscriptionName
+                                    stateDescription = subscriptionUpdateState
+                                }
+                                .toggleable(
+                                    value = subCache.subscription.enabled,
+                                    role = Role.Switch,
+                                    onValueChange = { checked ->
+                                        viewModel.update(subCache.guid, subCache.subscription.copy(enabled = checked))
+                                    },
+                                )
                                 .padding(horizontal = 14.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
                                     text = subCache.subscription.remarks,
+                                    modifier = Modifier.clearAndSetSemantics {},
                                     style = MaterialTheme.typography.bodyLarge,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -243,7 +260,7 @@ fun SubSettingScreen(
                                                 painter = painterResource(R.drawable.ic_share_24dp),
                                                 contentDescription = stringResource(
                                                     R.string.acc_share_named,
-                                                    subCache.subscription.remarks
+                                                    subscriptionName
                                                 )
                                             )
                                         }
@@ -253,7 +270,7 @@ fun SubSettingScreen(
                                             painter = painterResource(R.drawable.ic_edit_24dp),
                                             contentDescription = stringResource(
                                                 R.string.acc_edit_named,
-                                                subCache.subscription.remarks
+                                                subscriptionName
                                             )
                                         )
                                     }
@@ -261,7 +278,7 @@ fun SubSettingScreen(
                                         if (confirmRemove) {
                                             removeTarget = SubscriptionDeleteTarget(
                                                 guid = subCache.guid,
-                                                name = subCache.subscription.remarks
+                                                name = subscriptionName
                                             )
                                         }
                                         else onRemoveSub(subCache.guid)
@@ -270,7 +287,7 @@ fun SubSettingScreen(
                                             painter = painterResource(R.drawable.ic_delete_24dp),
                                             contentDescription = stringResource(
                                                 R.string.acc_delete_named,
-                                                subCache.subscription.remarks
+                                                subscriptionName
                                             )
                                         )
                                     }
@@ -278,16 +295,8 @@ fun SubSettingScreen(
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Switch(
                                     checked = subCache.subscription.enabled,
-                                    onCheckedChange = { checked ->
-                                        val updated = subCache.subscription.copy()
-                                        updated.enabled = checked
-                                        viewModel.update(subCache.guid, updated)
-                                    },
-                                    modifier = Modifier
-                                        .scale(0.7f)
-                                        .semantics {
-                                            contentDescription = subscriptionUpdateLabel
-                                        },
+                                    onCheckedChange = null,
+                                    modifier = Modifier.scale(0.7f),
                                     colors = SwitchDefaults.colors(
                                         checkedThumbColor = MaterialTheme.colorScheme.onSecondary,
                                         checkedTrackColor = MaterialTheme.colorScheme.secondary
