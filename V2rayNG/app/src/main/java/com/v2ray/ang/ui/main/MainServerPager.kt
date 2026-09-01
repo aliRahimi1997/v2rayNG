@@ -70,7 +70,6 @@ fun GroupPagerPage(
     groupId: String,
     mainViewModel: MainViewModel,
     selectedGuid: String?,
-    isRunning: Boolean,
     locateTarget: LocateTarget?,
     doubleColumnDisplay: Boolean,
     searchQuery: String,
@@ -106,7 +105,6 @@ fun GroupPagerPage(
     ServerListPage(
         rows = groupState.rows,
         selectedGuid = selectedGuid,
-        isRunning = isRunning,
         locateTarget = locateTarget?.takeIf { it.groupId == groupId },
         canReorder = canReorder,
         doubleColumnDisplay = doubleColumnDisplay,
@@ -143,7 +141,6 @@ internal class ServerRowActions(
 private fun ServerListPage(
     rows: List<ServerRowUiModel>,
     selectedGuid: String?,
-    isRunning: Boolean,
     locateTarget: LocateTarget?,
     canReorder: Boolean,
     doubleColumnDisplay: Boolean,
@@ -180,7 +177,6 @@ private fun ServerListPage(
                     ServerItemColumn(
                         row = row,
                         isSelected = row.guid == selectedGuid,
-                        isRunning = isRunning,
                         doubleColumnDisplay = true,
                         actions = actions
                     )
@@ -232,7 +228,6 @@ private fun ServerListPage(
                             ServerItemRow(
                                 row = row,
                                 isSelected = row.guid == selectedGuid,
-                                isRunning = isRunning,
                                 actions = actions
                             )
                         }
@@ -242,7 +237,6 @@ private fun ServerListPage(
                     ServerItemRow(
                         row = row,
                         isSelected = row.guid == selectedGuid,
-                        isRunning = isRunning,
                         actions = actions
                     )
                     ItemDivider()
@@ -288,13 +282,11 @@ private fun LocateTargetEffect(
 private fun ServerItemRow(
     row: ServerRowUiModel,
     isSelected: Boolean,
-    isRunning: Boolean,
     actions: ServerRowActions
 ) {
     ServerListItem(
         row = row,
         isSelected = isSelected,
-        isRunning = isRunning,
         doubleColumnDisplay = false,
         actions = actions
     )
@@ -304,7 +296,6 @@ private fun ServerItemRow(
 private fun ServerItemColumn(
     row: ServerRowUiModel,
     isSelected: Boolean,
-    isRunning: Boolean,
     doubleColumnDisplay: Boolean,
     actions: ServerRowActions
 ) {
@@ -312,7 +303,6 @@ private fun ServerItemColumn(
         ServerListItem(
             row = row,
             isSelected = isSelected,
-            isRunning = isRunning,
             doubleColumnDisplay = doubleColumnDisplay,
             actions = actions
         )
@@ -324,7 +314,6 @@ private fun ServerItemColumn(
 internal fun ServerListItem(
     row: ServerRowUiModel,
     isSelected: Boolean,
-    isRunning: Boolean,
     doubleColumnDisplay: Boolean,
     actions: ServerRowActions
 ) {
@@ -347,7 +336,7 @@ internal fun ServerListItem(
     }
     val description = row.accessibilityDescription(
         testResult = testResultAccessibility,
-        activePrefix = if (isSelected && isRunning) stringResource(R.string.acc_active_server) else null,
+        prefix = if (isSelected) stringResource(R.string.acc_selected_server) else null,
     )
     val accessibilityActions = serverAccessibilityActions(row.profile.configType.isComplexType()).map { action ->
         val label = when (action) {
