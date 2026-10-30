@@ -30,6 +30,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -118,13 +120,18 @@ fun MainBottomBar(
         }
     }
 
-    Box(modifier = Modifier.fillMaxWidth()) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics { isTraversalGroup = true }
+    ) {
         val serviceActionLabel = stringResource(if (isRunning) R.string.acc_disconnect else R.string.acc_connect)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
                 .semantics(mergeDescendants = true) {
+                    traversalIndex = 0f
                     contentDescription = accessibilityText
                 }
                 .then(connectionActionModifier)
@@ -175,7 +182,10 @@ fun MainBottomBar(
                 .padding(end = 24.dp)
                 .offset(y = (-28).dp)
                 .navigationBarsPadding()
-                .semantics { onClick(label = serviceActionLabel, action = null) },
+                .semantics {
+                    traversalIndex = 1f
+                    onClick(label = serviceActionLabel, action = null)
+                },
             containerColor = if (isRunning) colorFabActive
             else if (isDarkTheme) colorFabInactiveDark
             else colorFabInactiveLight
