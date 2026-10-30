@@ -260,13 +260,7 @@ class MainViewModel(
         if (isRunning) R.string.connection_connected_accessibility else R.string.connection_not_connected
     )
 
-    internal fun formatTestAnnouncement(status: MainStatus): String {
-        return if (status is MainStatus.ConnectionTest) {
-            formatConnectionTestResult(status.result, accessible = true)
-        } else {
-            formatStatus(status)
-        }
-    }
+    internal fun formatTestAnnouncement(status: MainStatus): String = formatStatus(status)
 
     private fun formatConnectionTestResult(
         result: ConnectionTestResult,
