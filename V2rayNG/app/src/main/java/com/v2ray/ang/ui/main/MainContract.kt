@@ -32,6 +32,7 @@ data class MainUiState(
     val locateTarget: LocateTarget? = null,
     val confirmRemove: Boolean = false,
     val doubleColumnDisplay: Boolean = false,
+    val a11yServerActionsInMenu: Boolean = false,
     val shareQRCodeBitmap: android.graphics.Bitmap? = null
 )
 

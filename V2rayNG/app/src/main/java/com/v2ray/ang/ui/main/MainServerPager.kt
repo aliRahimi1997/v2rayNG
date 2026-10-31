@@ -47,6 +47,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.text.font.FontWeight
@@ -82,6 +83,7 @@ fun GroupPagerPage(
     selectedGuid: String?,
     locateTarget: LocateTarget?,
     doubleColumnDisplay: Boolean,
+    a11yServerActionsInMenu: Boolean,
     searchQuery: String,
     lazyListStates: MutableMap<String, LazyListState>,
     lazyGridStates: MutableMap<String, LazyGridState>,
@@ -143,6 +145,7 @@ fun GroupPagerPage(
             locateTarget = locateTarget?.takeIf { it.groupId == groupId },
             canReorder = canReorder,
             doubleColumnDisplay = doubleColumnDisplay,
+            a11yServerActionsInMenu = a11yServerActionsInMenu,
             groupId = groupId,
             lazyListStates = lazyListStates,
             lazyGridStates = lazyGridStates,
@@ -188,6 +191,7 @@ private fun ServerListPage(
     locateTarget: LocateTarget?,
     canReorder: Boolean,
     doubleColumnDisplay: Boolean,
+    a11yServerActionsInMenu: Boolean,
     groupId: String,
     lazyListStates: MutableMap<String, LazyListState>,
     lazyGridStates: MutableMap<String, LazyGridState>,
@@ -221,6 +225,7 @@ private fun ServerListPage(
                     ServerItemColumn(
                         row = row,
                         isSelected = row.guid == selectedGuid,
+                        a11yServerActionsInMenu = a11yServerActionsInMenu,
                         reorderIndex = index.takeIf { canReorder },
                         itemCount = rows.size,
                         actions = actions
@@ -274,6 +279,7 @@ private fun ServerListPage(
                                 row = row,
                                 isSelected = row.guid == selectedGuid,
                                 doubleColumnDisplay = false,
+                                a11yServerActionsInMenu = a11yServerActionsInMenu,
                                 reorderIndex = index,
                                 itemCount = rows.size,
                                 actions = actions
@@ -286,6 +292,7 @@ private fun ServerListPage(
                         row = row,
                         isSelected = row.guid == selectedGuid,
                         doubleColumnDisplay = false,
+                        a11yServerActionsInMenu = a11yServerActionsInMenu,
                         reorderIndex = null,
                         itemCount = rows.size,
                         actions = actions
@@ -333,6 +340,7 @@ private fun LocateTargetEffect(
 private fun ServerItemColumn(
     row: ServerRowUiModel,
     isSelected: Boolean,
+    a11yServerActionsInMenu: Boolean,
     reorderIndex: Int?,
     itemCount: Int,
     actions: ServerRowActions
@@ -342,6 +350,7 @@ private fun ServerItemColumn(
             row = row,
             isSelected = isSelected,
             doubleColumnDisplay = true,
+            a11yServerActionsInMenu = a11yServerActionsInMenu,
             reorderIndex = reorderIndex,
             itemCount = itemCount,
             actions = actions
@@ -355,6 +364,7 @@ private fun ServerListItem(
     row: ServerRowUiModel,
     isSelected: Boolean,
     doubleColumnDisplay: Boolean,
+    a11yServerActionsInMenu: Boolean,
     reorderIndex: Int?,
     itemCount: Int,
     actions: ServerRowActions
@@ -368,34 +378,53 @@ private fun ServerListItem(
         testResult = testResult,
         prefix = if (isSelected) stringResource(R.string.acc_selected_server) else null,
     )
-    val itemActions = serverAccessibilityActions(row.profile.configType.isComplexType()).map { action ->
-        val label = when (action) {
-            ServerMenuAction.Edit -> stringResource(R.string.acc_edit_config_named, row.remarks)
-            ServerMenuAction.Delete -> stringResource(R.string.acc_delete_config_named, row.remarks)
-            else -> stringResource(action.labelRes)
+    val itemActions = if (a11yServerActionsInMenu) {
+        serverAccessibilityActions(row.profile.configType.isComplexType()).map { action ->
+            val label = when (action) {
+                ServerMenuAction.Edit -> stringResource(R.string.acc_edit_config_named, row.remarks)
+                ServerMenuAction.Delete -> stringResource(R.string.acc_delete_config_named, row.remarks)
+                else -> stringResource(action.labelRes)
+            }
+            CustomAccessibilityAction(label) {
+                actions.perform(action, row)
+                true
+            }
         }
-        CustomAccessibilityAction(label) {
-            actions.perform(action, row)
-            true
-        }
+    } else {
+        emptyList()
     }
-    val accessibilityActions = itemActions + if (reorderIndex != null) {
+    val reorderActions = if (reorderIndex != null) {
         reorderAccessibilityActions(reorderIndex, itemCount, actions.feedback) { command ->
             actions.move(row.guid, command)
         }
     } else {
         emptyList()
     }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min)
-            .clickable(onClickLabel = stringResource(R.string.acc_select_server)) { actions.select(row.guid) }
-            // Keep native activation, but move the child buttons into the row's action menu.
-            .clearAndSetSemantics {
-                contentDescription = description
+    val accessibilityActions = itemActions + reorderActions
+
+    val rowModifier = Modifier
+        .fillMaxWidth()
+        .height(IntrinsicSize.Min)
+        .clickable(onClickLabel = stringResource(R.string.acc_select_server)) { actions.select(row.guid) }
+
+    val finalModifier = if (a11yServerActionsInMenu) {
+        rowModifier.clearAndSetSemantics {
+            contentDescription = description
+            if (accessibilityActions.isNotEmpty()) {
                 customActions = accessibilityActions
             }
+        }
+    } else {
+        rowModifier.semantics(mergeDescendants = true) {
+            contentDescription = description
+            if (accessibilityActions.isNotEmpty()) {
+                customActions = accessibilityActions
+            }
+        }
+    }
+
+    Row(
+        modifier = finalModifier
     ) {
         Box(
             Modifier

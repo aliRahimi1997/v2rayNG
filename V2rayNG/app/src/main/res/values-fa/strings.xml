@@ -309,6 +309,9 @@
     <string name="acc_settings_group_collapsed">%1$s، گروه بسته است</string>
     <string name="summary_pref_group_all_display">نمایش پروفایل‌های همهٔ گروه‌های اشتراک در یک زبانه.</string>
 
+    <string name="title_pref_a11y_server_actions_in_menu">انتقال گزینه‌های سرور به منوی کنش‌های تاک‌بک</string>
+    <string name="summary_pref_a11y_server_actions_in_menu">دکمه‌های ویرایش، حذف و اشتراک‌گذاری به منوی کنش‌های تاک‌بک منتقل می‌شوند تا دکمه‌های جداگانه در پیمایش سوایپ حذف شوند.</string>
+
     <!-- AboutActivity -->
     <string name="title_pref_feedback">بازخورد</string>
     <string name="summary_pref_feedback">بازخورد یا گزارش اشکالات در گیت‌ هاب</string>

@@ -130,6 +130,9 @@ class MainRepository(
     override fun getDoubleColumnDisplay(): Boolean =
         MmkvManager.decodeSettingsBool(AppConfig.PREF_DOUBLE_COLUMN_DISPLAY, false)
 
+    override fun getA11yServerActionsInMenu(): Boolean =
+        MmkvManager.decodeSettingsBool(AppConfig.PREF_A11Y_SERVER_ACTIONS_IN_MENU, false)
+
     override fun isGroupAllDisplayEnabled(): Boolean =
         MmkvManager.decodeSettingsBool(AppConfig.PREF_GROUP_ALL_DISPLAY)
 

@@ -307,6 +307,9 @@
     <string name="acc_settings_group_collapsed">%1$s。分组已折叠</string>
     <string name="summary_pref_group_all_display">在一个标签页中汇总所有订阅组的配置。</string>
 
+    <string name="title_pref_a11y_server_actions_in_menu">将节点操作移至 TalkBack 操作菜单</string>
+    <string name="summary_pref_a11y_server_actions_in_menu">将编辑、删除和分享等按钮移至 TalkBack 操作菜单，而非滑动导航中的独立按钮。</string>
+
     <!-- AboutActivity -->
     <string name="title_pref_feedback">反馈</string>
     <string name="summary_pref_feedback">前往 GitHub 提出改进建议或报告问题</string>

@@ -309,6 +309,9 @@
     <string name="acc_settings_group_collapsed">%1$s. Group is collapsed</string>
     <string name="summary_pref_group_all_display">Combine profiles from every subscription group in one tab.</string>
 
+    <string name="title_pref_a11y_server_actions_in_menu">Move server actions to TalkBack menu</string>
+    <string name="summary_pref_a11y_server_actions_in_menu">Move Edit, Delete, and Share buttons into TalkBack\'s Actions menu instead of showing separate buttons in swipe navigation.</string>
+
     <!-- AboutActivity -->
     <string name="title_pref_feedback">Feedback</string>
     <string name="summary_pref_feedback">Suggest improvements or report bugs on GitHub</string>

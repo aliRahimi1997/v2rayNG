@@ -88,7 +88,8 @@ class MainViewModel(
             selectedGroupId = dataSource.getSelectedSubscriptionId(),
             selectedGuid = dataSource.getSelectServer(),
             confirmRemove = dataSource.getConfirmRemove(),
-            doubleColumnDisplay = dataSource.getDoubleColumnDisplay()
+            doubleColumnDisplay = dataSource.getDoubleColumnDisplay(),
+            a11yServerActionsInMenu = dataSource.getA11yServerActionsInMenu()
         )
     )
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
@@ -380,7 +381,8 @@ class MainViewModel(
         _uiState.update {
             it.copy(
                 confirmRemove = dataSource.getConfirmRemove(),
-                doubleColumnDisplay = dataSource.getDoubleColumnDisplay()
+                doubleColumnDisplay = dataSource.getDoubleColumnDisplay(),
+                a11yServerActionsInMenu = dataSource.getA11yServerActionsInMenu()
             )
         }
     }
