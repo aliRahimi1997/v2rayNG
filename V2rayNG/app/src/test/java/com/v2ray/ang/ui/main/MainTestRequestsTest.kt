@@ -59,4 +59,25 @@ class MainTestRequestsTest {
         assertEquals(bulk, requests.completeBulk(bulk.id))
         assertFalse(requests.isTesting)
     }
+
+    @Test
+    fun secondPhaseUpdateAcceptedForLastCompletedCurrentRequestUntilInvalidatedOrReplaced() {
+        val requests = MainTestRequests()
+        val request = requests.beginCurrent()
+        assertTrue(requests.isCurrentOrLastCompleted(request))
+        assertTrue(requests.completeCurrent(request))
+        assertFalse(requests.completeCurrent(request))
+        assertTrue(requests.isCurrentOrLastCompleted(request))
+        assertEquals(request, requests.lastCompletedCurrent)
+
+        // Starting a new current request invalidates the previous completed request
+        val next = requests.beginCurrent()
+        assertFalse(requests.isCurrentOrLastCompleted(request))
+        assertTrue(requests.isCurrentOrLastCompleted(next))
+
+        // Invalidation clears both
+        requests.invalidateCurrent()
+        assertFalse(requests.isCurrentOrLastCompleted(next))
+        assertNull(requests.lastCompletedCurrent)
+    }
 }

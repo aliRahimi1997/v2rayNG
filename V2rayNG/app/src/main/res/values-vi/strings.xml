@@ -450,7 +450,7 @@
     <string name="connection_test_pending">Kiểm tra kết nối</string>
     <string name="connection_test_testing">Đang kiểm tra kết nối mạng…</string>
     <string name="connection_test_testing_count">Đang kiểm tra %d cấu hình…</string>
-    <string name="connection_test_available">Kết nối thành công sau %1$s</string>
+    <string name="connection_test_available">Kiểm tra thành công: thời gian truy cập Google là %d ms</string>
     <string name="server_test_delay_value">%1$d mili giây</string>
     <string name="connection_test_error">Kiểm tra kết nối thất bại: %s</string>
     <string name="connection_test_fail">Không thể truy cập Internet</string>

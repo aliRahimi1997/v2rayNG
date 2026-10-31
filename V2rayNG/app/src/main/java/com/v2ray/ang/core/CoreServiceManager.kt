@@ -388,18 +388,39 @@ object CoreServiceManager {
             }
 
             ensureActive()
-            val endpoint = if (time >= 0) SpeedtestManager.getRemoteIPInfo() else null
-            val result = ConnectionTestResult(
+            val initialResult = ConnectionTestResult(
                 delayMillis = time,
                 errorMessage = errorStr,
-                country = endpoint?.country,
-                ipAddress = endpoint?.ipAddress,
             )
             withContext(Dispatchers.Main.immediate) {
                 if (isRunning()) {
-                    MessageHelper.sendMsg2UI(service, AppConfig.MSG_MEASURE_DELAY_RESULT, result, requestId)
+                    MessageHelper.sendMsg2UI(service, AppConfig.MSG_MEASURE_DELAY_RESULT, initialResult, requestId)
                 } else {
                     MessageHelper.sendMsg2UI(service, AppConfig.MSG_MEASURE_DELAY_CANCEL, "", requestId)
+                }
+            }
+
+            if (time >= 0) {
+                ensureActive()
+                val endpoint = try {
+                    SpeedtestManager.getRemoteIPInfo()
+                } catch (e: Exception) {
+                    LogUtil.e(AppConfig.TAG, "StartCore-Manager: Failed to fetch remote IP info", e)
+                    null
+                }
+                if (endpoint != null) {
+                    ensureActive()
+                    val updatedResult = ConnectionTestResult(
+                        delayMillis = time,
+                        errorMessage = errorStr,
+                        country = endpoint.country,
+                        ipAddress = endpoint.ipAddress,
+                    )
+                    withContext(Dispatchers.Main.immediate) {
+                        if (isRunning()) {
+                            MessageHelper.sendMsg2UI(service, AppConfig.MSG_MEASURE_DELAY_RESULT, updatedResult, requestId)
+                        }
+                    }
                 }
             }
         }.invokeOnCompletion { cause ->

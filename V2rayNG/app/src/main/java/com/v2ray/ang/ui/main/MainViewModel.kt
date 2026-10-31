@@ -168,10 +168,17 @@ class MainViewModel(
                 updateRunningState(false)
             }
             is MainServiceEvent.MeasureDelayResult -> {
-                if (!uiState.value.isRunning || !testRequests.completeCurrent(event.requestId)) return
-                val status = MainStatus.ConnectionTest(event.result)
-                _uiState.update { it.copy(isTesting = testRequests.isTesting, status = status) }
-                publishTestAnnouncement(status)
+                if (!uiState.value.isRunning) return
+                if (testRequests.completeCurrent(event.requestId)) {
+                    val status = MainStatus.ConnectionTest(event.result)
+                    _uiState.update { it.copy(isTesting = testRequests.isTesting, status = status) }
+                    publishTestAnnouncement(status)
+                } else if (testRequests.isCurrentOrLastCompleted(event.requestId) &&
+                    uiState.value.status is MainStatus.ConnectionTest
+                ) {
+                    val status = MainStatus.ConnectionTest(event.result)
+                    _uiState.update { it.copy(status = status) }
+                }
             }
 
             is MainServiceEvent.MeasureConfigSuccess -> {
@@ -253,7 +260,7 @@ class MainViewModel(
             status.progress
         )
 
-        is MainStatus.ConnectionTest -> formatConnectionTestResult(status.result, accessible = false)
+        is MainStatus.ConnectionTest -> formatConnectionTestResult(status.result)
     }
 
     internal fun formatConnectionStatusForAccessibility(isRunning: Boolean): String = dataSource.getString(
@@ -262,24 +269,9 @@ class MainViewModel(
 
     internal fun formatTestAnnouncement(status: MainStatus): String = formatStatus(status)
 
-    private fun formatConnectionTestResult(
-        result: ConnectionTestResult,
-        accessible: Boolean,
-    ): String {
+    private fun formatConnectionTestResult(result: ConnectionTestResult): String {
         val status = if (result.delayMillis >= 0) {
-            val delay = if (accessible) {
-                dataSource.getQuantityString(
-                    R.plurals.connection_test_delay_accessibility_value,
-                    result.delayMillis.coerceIn(
-                        Int.MIN_VALUE.toLong(),
-                        Int.MAX_VALUE.toLong(),
-                    ).toInt(),
-                    result.delayMillis,
-                )
-            } else {
-                dataSource.getString(R.string.server_test_delay_value, result.delayMillis)
-            }
-            dataSource.getString(R.string.connection_test_available, delay)
+            dataSource.getString(R.string.connection_test_available, result.delayMillis)
         } else {
             val detail = result.errorMessage.ifBlank {
                 dataSource.getString(R.string.connection_test_empty_message)

@@ -454,7 +454,7 @@
     <string name="connection_test_pending">Bağlantını yoxlayın</string>
     <string name="connection_test_testing">Yoxlanılır…</string>
     <string name="connection_test_testing_count">%d konfiqurasiya yoxlanılır…</string>
-    <string name="connection_test_available">Bağlantı %1$s ərzində uğurla quruldu</string>
+    <string name="connection_test_available">Bağlantı %dms ərzində uğurla quruldu</string>
     <string name="server_test_delay_value">%1$d ms</string>
     <string name="connection_test_error">Bağlantı sınağı uğursuz oldu: %s</string>
     <string name="connection_test_fail">İnternet əlçatmazdır</string>
