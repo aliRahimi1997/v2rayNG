@@ -44,7 +44,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -365,17 +364,8 @@ private fun ServerListItem(
     } else {
         stringResource(R.string.server_test_delay_value, row.testDelayMillis)
     }
-    val testResultAccessibility = when {
-        row.testDelayMillis < 0L -> stringResource(R.string.acc_server_test_failed)
-        row.testDelayMillis == 0L -> ""
-        else -> pluralStringResource(
-            R.plurals.server_test_delay_accessibility_value,
-            row.testDelayMillis.coerceAtMost(Int.MAX_VALUE.toLong()).toInt(),
-            row.testDelayMillis,
-        )
-    }
     val description = row.accessibilityDescription(
-        testResult = testResultAccessibility,
+        testResult = testResult,
         prefix = if (isSelected) stringResource(R.string.acc_selected_server) else null,
     )
     val itemActions = serverAccessibilityActions(row.profile.configType.isComplexType()).map { action ->

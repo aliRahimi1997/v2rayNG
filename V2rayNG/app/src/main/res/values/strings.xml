@@ -56,8 +56,8 @@
     </plurals>
     <string name="acc_server_test_failed">Connection test failed</string>
     <plurals name="server_test_delay_accessibility_value">
-        <item quantity="one">%1$d millisecond</item>
-        <item quantity="other">%1$d milliseconds</item>
+        <item quantity="one">%1$d ms</item>
+        <item quantity="other">%1$d ms</item>
     </plurals>
     <string name="acc_share_config_named">Share config %1$s</string>
     <string name="acc_edit_config_named">Edit config %1$s</string>
