@@ -311,6 +311,8 @@
 
     <string name="title_pref_a11y_server_actions_in_menu">Move server actions to TalkBack menu</string>
     <string name="summary_pref_a11y_server_actions_in_menu">Move Edit, Delete, and Share buttons into TalkBack\'s Actions menu instead of showing separate buttons in swipe navigation.</string>
+    <string name="title_pref_prompt_subscription_name">Ask for group name when importing subscriptions</string>
+    <string name="summary_pref_prompt_subscription_name">Show a naming dialog before saving each new subscription group</string>
 
     <!-- AboutActivity -->
     <string name="title_pref_feedback">Feedback</string>
@@ -628,6 +630,15 @@
     <string name="tasker_blurb_stop">Stop %1$s</string>
     <string name="connection_test_empty_message">no details available</string>
     <string name="value_unknown">unknown</string>
+
+    <string name="sub_import_title">Name subscription group</string>
+    <string name="sub_import_message">Provide the name for the subscription group: %1$s.</string>
+    <string name="sub_import_name">Subscription name</string>
+    <string name="sub_import_default_name">import sub</string>
+    <plurals name="import_subscription_duplicate">
+        <item quantity="one">This subscription already exists.</item>
+        <item quantity="other">These subscriptions already exist.</item>
+    </plurals>
     <string name="sub_info_open_support">Open support link</string>
     <string name="sub_info_open_page">Open subscription page</string>
     <string name="sub_info_traffic" translatable="false">%1$s / %2$s</string>

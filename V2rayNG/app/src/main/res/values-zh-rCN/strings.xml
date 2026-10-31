@@ -309,6 +309,8 @@
 
     <string name="title_pref_a11y_server_actions_in_menu">将节点操作移至 TalkBack 操作菜单</string>
     <string name="summary_pref_a11y_server_actions_in_menu">将编辑、删除和分享等按钮移至 TalkBack 操作菜单，而非滑动导航中的独立按钮。</string>
+    <string name="title_pref_prompt_subscription_name">导入订阅时询问分组名称</string>
+    <string name="summary_pref_prompt_subscription_name">在保存每个新订阅分组前显示命名对话框</string>
 
     <!-- AboutActivity -->
     <string name="title_pref_feedback">反馈</string>
@@ -623,6 +625,14 @@
     <string name="tasker_blurb_stop">停止 %1$s</string>
     <string name="connection_test_empty_message">无详细信息</string>
     <string name="value_unknown">未知</string>
+
+    <string name="sub_import_title">为订阅分组命名</string>
+    <string name="sub_import_message">请为订阅分组命名：%1$s。</string>
+    <string name="sub_import_name">订阅名称</string>
+    <string name="sub_import_default_name">导入订阅</string>
+    <plurals name="import_subscription_duplicate">
+        <item quantity="other">订阅已存在。</item>
+    </plurals>
     <string name="sub_info_open_support">打开支持链接</string>
     <string name="sub_info_open_page">打开订阅信息页面</string>
     <string name="sub_info_unlimited">无限制</string>

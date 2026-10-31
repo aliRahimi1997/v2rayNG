@@ -133,6 +133,9 @@ class MainRepository(
     override fun getA11yServerActionsInMenu(): Boolean =
         MmkvManager.decodeSettingsBool(AppConfig.PREF_A11Y_SERVER_ACTIONS_IN_MENU, false)
 
+    override fun isPromptSubscriptionNameEnabled(): Boolean =
+        MmkvManager.decodeSettingsBool(AppConfig.PREF_PROMPT_SUBSCRIPTION_NAME, false)
+
     override fun isGroupAllDisplayEnabled(): Boolean =
         MmkvManager.decodeSettingsBool(AppConfig.PREF_GROUP_ALL_DISPLAY)
 
@@ -203,8 +206,10 @@ class MainRepository(
     override suspend fun importBatchConfig(
         server: String?,
         subscriptionId: String,
-        updateUI: Boolean
-    ): Pair<Int, Int> = AngConfigManager.importBatchConfig(server, subscriptionId, updateUI)
+        updateUI: Boolean,
+        requestSubscriptionName: (suspend (String, String?, Set<String>) -> String?)?
+    ): com.v2ray.ang.dto.ConfigImportResult =
+        AngConfigManager.importBatchConfig(server, subscriptionId, updateUI, requestSubscriptionName)
 
     override fun updateConfigViaSubAll(): SubscriptionUpdateResult =
         AngConfigManager.updateConfigViaSubAll()

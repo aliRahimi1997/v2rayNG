@@ -624,4 +624,11 @@
     <string name="sub_info_open_page">Mở trang thông tin đăng ký</string>
     <string name="sub_info_unlimited">Không giới hạn</string>
 
+    <string name="sub_import_title">Đặt tên nhóm đăng ký</string>
+    <string name="sub_import_message">Nhập tên cho nhóm đăng ký: %1$s.</string>
+    <string name="sub_import_name">Tên đăng ký</string>
+    <string name="sub_import_default_name">Đăng ký đã nhập</string>
+    <plurals name="import_subscription_duplicate">
+        <item quantity="other">Gói đăng ký đã tồn tại.</item>
+    </plurals>
 </resources>

@@ -311,6 +311,8 @@
 
     <string name="title_pref_a11y_server_actions_in_menu">انتقال گزینه‌های سرور به منوی کنش‌های تاک‌بک</string>
     <string name="summary_pref_a11y_server_actions_in_menu">دکمه‌های ویرایش، حذف و اشتراک‌گذاری به منوی کنش‌های تاک‌بک منتقل می‌شوند تا دکمه‌های جداگانه در پیمایش سوایپ حذف شوند.</string>
+    <string name="title_pref_prompt_subscription_name">درخواست نام هنگام افزودن اشتراک</string>
+    <string name="summary_pref_prompt_subscription_name">نمایش کادر تعیین نام برای گروه اشتراک قبل از ذخیره کردن لینک‌های جدید</string>
 
     <!-- AboutActivity -->
     <string name="title_pref_feedback">بازخورد</string>
@@ -628,6 +630,15 @@
     <string name="tasker_blurb_stop">توقف %1$s</string>
     <string name="connection_test_empty_message">جزئیاتی در دسترس نیست</string>
     <string name="value_unknown">ناشناخته</string>
+
+    <string name="sub_import_title">نام‌گذاری گروه اشتراک</string>
+    <string name="sub_import_message">نام گروه اشتراک را وارد کنید: %1$s.</string>
+    <string name="sub_import_name">نام اشتراک</string>
+    <string name="sub_import_default_name">اشتراک واردشده</string>
+    <plurals name="import_subscription_duplicate">
+        <item quantity="one">این اشتراک از قبل وجود دارد.</item>
+        <item quantity="other">این اشتراک‌ها از قبل وجود دارند.</item>
+    </plurals>
     <string name="sub_info_open_support">باز کردن لینک پشتیبانی</string>
     <string name="sub_info_open_page">باز کردن صفحه اطلاعات اشتراک</string>
     <string name="sub_info_unlimited">نامحدود</string>

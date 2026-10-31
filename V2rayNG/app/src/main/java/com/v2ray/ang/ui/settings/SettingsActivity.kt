@@ -159,6 +159,7 @@ fun SettingsScreen(
     var doubleColumnDisplay by rememberMmkvBool(AppConfig.PREF_DOUBLE_COLUMN_DISPLAY, false)
     var groupAllDisplay by rememberMmkvBool(AppConfig.PREF_GROUP_ALL_DISPLAY, false)
     var a11yServerActionsInMenu by rememberMmkvBool(AppConfig.PREF_A11Y_SERVER_ACTIONS_IN_MENU, false)
+    var promptSubscriptionName by rememberMmkvBool(AppConfig.PREF_PROMPT_SUBSCRIPTION_NAME, false)
     var language by remember {
         mutableStateOf(
             MmkvManager.decodeSettingsString(AppConfig.PREF_LANGUAGE, "auto") ?: "auto"
@@ -277,6 +278,12 @@ fun SettingsScreen(
                     summary = stringResource(R.string.summary_pref_a11y_server_actions_in_menu),
                     checked = a11yServerActionsInMenu,
                     onCheckedChange = { a11yServerActionsInMenu = it }
+                )
+                SettingsSwitchItem(
+                    title = stringResource(R.string.title_pref_prompt_subscription_name),
+                    summary = stringResource(R.string.summary_pref_prompt_subscription_name),
+                    checked = promptSubscriptionName,
+                    onCheckedChange = { promptSubscriptionName = it }
                 )
                 SettingsSwitchItem(
                     title = stringResource(R.string.title_pref_dynamic_color),

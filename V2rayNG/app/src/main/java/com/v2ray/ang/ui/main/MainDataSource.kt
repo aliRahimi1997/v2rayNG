@@ -22,6 +22,7 @@ interface MainDataSource : Closeable {
     fun getDoubleColumnDisplay(): Boolean
     fun getA11yServerActionsInMenu(): Boolean
     fun isGroupAllDisplayEnabled(): Boolean
+    fun isPromptSubscriptionNameEnabled(): Boolean
 
     fun getString(resId: Int): String
     fun getString(resId: Int, vararg formatArgs: Any): String
@@ -48,8 +49,9 @@ interface MainDataSource : Closeable {
     suspend fun importBatchConfig(
         server: String?,
         subscriptionId: String,
-        updateUI: Boolean
-    ): Pair<Int, Int>
+        updateUI: Boolean,
+        requestSubscriptionName: (suspend (String, String?, Set<String>) -> String?)? = null
+    ): com.v2ray.ang.dto.ConfigImportResult
 
     fun updateConfigViaSubAll(): SubscriptionUpdateResult
     fun updateConfigViaSub(subscriptionCache: SubscriptionCache): SubscriptionUpdateResult

@@ -33,8 +33,11 @@ data class MainUiState(
     val confirmRemove: Boolean = false,
     val doubleColumnDisplay: Boolean = false,
     val a11yServerActionsInMenu: Boolean = false,
-    val shareQRCodeBitmap: android.graphics.Bitmap? = null
+    val shareQRCodeBitmap: android.graphics.Bitmap? = null,
+    val subscriptionImport: SubscriptionImportState? = null
 )
+
+data class SubscriptionImportState(val url: String, val name: String)
 
 /**
  * All possible user interaction intents
@@ -73,7 +76,14 @@ sealed interface MainAction {
     data object DismissQRCodeDialog : MainAction
     data class OpenSubscriptionLink(val url: String) : MainAction
 
-    data class ImportBatchConfig(val configText: String) : MainAction
+    data class ImportBatchConfig(
+        val configText: String,
+        val subscriptionId: String? = null,
+        val append: Boolean = true
+    ) : MainAction
+    data class ChangeSubscriptionImportName(val name: String) : MainAction
+    data object ConfirmSubscriptionImport : MainAction
+    data object CancelSubscriptionImport : MainAction
 
     data object LocateHandled : MainAction
 }

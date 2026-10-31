@@ -56,6 +56,7 @@ object AppConfig {
     const val PREF_DOUBLE_COLUMN_DISPLAY = "pref_double_column_display"
     const val PREF_GROUP_ALL_DISPLAY = "pref_group_all_display"
     const val PREF_A11Y_SERVER_ACTIONS_IN_MENU = "pref_a11y_server_actions_in_menu"
+    const val PREF_PROMPT_SUBSCRIPTION_NAME = "pref_prompt_subscription_name"
     const val PREF_LANGUAGE = "pref_language"
     const val PREF_APP_LOCALE_MIGRATED = "pref_app_locale_migrated"
     const val PREF_UI_MODE_NIGHT = "pref_ui_mode_night"

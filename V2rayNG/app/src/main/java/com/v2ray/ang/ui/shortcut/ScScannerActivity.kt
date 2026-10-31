@@ -27,15 +27,9 @@ class ScScannerActivity : HelperBaseComponentActivity() {
     private fun importQRcode() {
         launchQRCodeScanner { scanResult ->
             if (scanResult != null) {
-                val (count, countSub) = AngConfigManager.importBatchConfig(scanResult, "", false)
-
-                if (count + countSub > 0) {
-                    toastSuccess(R.string.toast_success)
-                } else {
-                    toastError(R.string.toast_failure)
-                }
-
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, MainActivity::class.java).apply {
+                    putExtra(MainActivity.EXTRA_IMPORT_CONFIG, scanResult)
+                })
             }
             finish()
         }

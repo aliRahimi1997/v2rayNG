@@ -635,6 +635,17 @@
     <string name="tasker_blurb_stop">Остановить %1$s</string>
     <string name="connection_test_empty_message">подробности отсутствуют</string>
     <string name="value_unknown">неизвестно</string>
+
+    <string name="sub_import_title">Назовите группу подписки</string>
+    <string name="sub_import_message">Укажите название группы подписки: %1$s.</string>
+    <string name="sub_import_name">Название подписки</string>
+    <string name="sub_import_default_name">Импортированная подписка</string>
+    <plurals name="import_subscription_duplicate">
+        <item quantity="one">Эта подписка уже существует.</item>
+        <item quantity="few">Эти подписки уже существуют.</item>
+        <item quantity="many">Эти подписки уже существуют.</item>
+        <item quantity="other">Эти подписки уже существуют.</item>
+    </plurals>
     <string name="sub_info_open_support">Открыть ссылку поддержки</string>
     <string name="sub_info_open_page">Открыть страницу подписки</string>
     <string name="sub_info_unlimited">Без ограничений</string>

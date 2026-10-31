@@ -629,4 +629,12 @@
     <string name="sub_info_open_page">واز کردن صفحه اطلاعات اشتراک</string>
     <string name="sub_info_unlimited">بی‌حد</string>
 
+    <string name="sub_import_title">نوم ناهاڌن بونکۊ اشتراک</string>
+    <string name="sub_import_message">نوم بونکۊ اشتراک ن بزنین: %1$s.</string>
+    <string name="sub_import_name">نوم اشتراک</string>
+    <string name="sub_import_default_name">اشتراک و من ٱوورده وابیڌه</string>
+    <plurals name="import_subscription_duplicate">
+        <item quantity="one">ای اشتراک ز زیتر بیڌس</item>
+        <item quantity="other">ای اشتراکا ز زیتر بیڌسووݩ</item>
+    </plurals>
 </resources>
