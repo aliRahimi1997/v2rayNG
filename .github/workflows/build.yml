@@ -93,6 +93,11 @@ jobs:
         fileName: "android_keystore.jks"
         encodedString: ${{ secrets.APP_KEYSTORE_BASE64 }}
 
+    - name: Override applicationId
+      run: |
+        sed -i 's/applicationId = "com.v2ray.ang"/applicationId = "com.rahimi.v2ray"/' \
+          ${{ github.workspace }}/V2rayNG/app/build.gradle.kts
+
     - name: Build APK
       run: |
         cd ${{ github.workspace }}/V2rayNG
